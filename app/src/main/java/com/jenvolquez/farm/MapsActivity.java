@@ -31,7 +31,7 @@ public class MapsActivity extends AppCompatActivity
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -6,4 +6,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+
+
+    <string name="google_app_id">928271657141</string>
+    <string name="parse_app_id">l3RJ5gJ97qIMeWe6IpPUlUW6L99RbiFUBqXAanKM</string>
+    <string name="parse_client_key">IXpqIu3rmx0bU9r1h40SAuUBcjvhxHYrz4vQJnU3</string>
 </resources>

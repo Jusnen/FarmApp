@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application
+    <application android:name=".StarterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,10 +24,10 @@
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.parse.APPLICATION_ID"
-            android:value="l3RJ5gJ97qIMeWe6IpPUlUW6L99RbiFUBqXAanKM" />
+            android:value="@string/parse_app_id" />
         <meta-data
             android:name="com.parse.CLIENT_KEY"
-            android:value="IXpqIu3rmx0bU9r1h40SAuUBcjvhxHYrz4vQJnU3" />
+            android:value="@string/parse_client_key" />
 
         <activity
             android:name=".SplashActivity"

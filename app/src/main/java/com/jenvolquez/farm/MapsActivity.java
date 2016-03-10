@@ -3,17 +3,18 @@ package com.jenvolquez.farm;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,17 +26,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.util.List;
-
 public class MapsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                    OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, GetCallback<ParseObject> {
+        GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -43,7 +41,6 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parse.initialize(this);
 
         setContentView(R.layout.activity_maps);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,8 +79,15 @@ public class MapsActivity extends AppCompatActivity
                     .build();
         }
 
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Medicine");
-        query.getFirstInBackground(this);
+        query.getInBackground("uTV8TMQFff", new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                Log.d("none", "none");
+            }
+        });
+
     }
 
     @Override
@@ -118,23 +122,35 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Fragment myFragment = null;
 
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_farm) {
+            myFragment= new FarmFragment();
 
         } else if (id == R.id.nav_pills) {
+            myFragment= new PillsFragment();
+
 
         } else if (id == R.id.nav_padecimientos) {
+            myFragment= new SufferingFragment();
 
         } else if (id == R.id.nav_cont) {
+            myFragment= new ContactFragment();
 
         } else if (id == R.id.nav_about) {
+            myFragment= new AboutFragment();
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, myFragment)
+                .commit();
+
         return true;
     }
 
@@ -173,8 +189,4 @@ public class MapsActivity extends AppCompatActivity
         super.onStop();
     }
 
-    @Override
-    public void done(ParseObject objects, ParseException e) {
-        Log.d("none", "none");
-    }
 }

@@ -2,15 +2,20 @@
 <layer-list
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:backgroundTint="#956446">
 
     <item
         android:drawable="@color/gray"/>
 
     <item>
         <bitmap
-            android:gravity="center"
-            android:src="@mipmap/ic_launchers"/>
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launchers"
+
+            android:scaleType="fitCenter"
+
+            />
     </item>
 
 

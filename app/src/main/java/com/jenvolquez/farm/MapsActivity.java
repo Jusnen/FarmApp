@@ -188,5 +188,4 @@ public class MapsActivity extends AppCompatActivity
         mGoogleApiClient.disconnect();
         super.onStop();
     }
-
 }

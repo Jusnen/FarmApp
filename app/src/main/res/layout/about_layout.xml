@@ -2,13 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sobre Nosotros"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="307dp"
+            android:layout_height="219dp"
+            android:text="Conoce y Localiza Farmacias de la Republica Dominicana, obteniendo informacion como precios de los medicamentos y posibles rutas "
+            android:id="@+id/textView9"
+            android:layout_gravity="center"
+            android:fontFamily="@string/store_picture_message"
+            android:textColor="#d45913"
+            android:textSize="25dp" />
+    </FrameLayout>
 
 </RelativeLayout>

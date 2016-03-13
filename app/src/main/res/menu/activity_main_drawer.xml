@@ -9,7 +9,7 @@
         <item
             android:id="@+id/nav_farm"
             android:icon="@drawable/ic_store_white"
-            android:title="Farmacias" />
+            android:title="Todas Farmacias" />
         <item
             android:id="@+id/nav_pills"
             android:icon="@drawable/ic_settings_input"

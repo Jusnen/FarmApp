@@ -11,11 +11,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import com.parse.ParseObject;
+import android.widget.ArrayAdapter;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -25,10 +25,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.parse.GetCallback;
+import com.jenvolquez.farm.parse.Pharmacy;
+import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.List;
 
 public class MapsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -78,19 +80,6 @@ public class MapsActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Medicine");
-        query.getInBackground("uTV8TMQFff", new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                Log.d("none", "none");
-            }
-        });
-
     }
 
     @Override
@@ -130,7 +119,7 @@ public class MapsActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_farm) {
-            myFragment= new FarmFragment();
+            myFragment= new PharmacyListFragment();
 
         } else if (id == R.id.nav_pills) {
             myFragment= new PillsFragment();
@@ -158,8 +147,22 @@ public class MapsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
+        ParseQuery<Pharmacy> query = ParseQuery.getQuery(Pharmacy.class);
+        final MapsActivity self = this;
+        query.findInBackground(new FindCallback<Pharmacy>() {
+
+            @Override
+            public void done(List<Pharmacy> pharmacies, ParseException e) {
+                for (Pharmacy p : pharmacies) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(p.getLocation())
+                            .title(p.getName()));
+                }
+            }
+        });
+
     }
 
     @Override

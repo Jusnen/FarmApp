@@ -33,9 +33,17 @@ public class Pharmacy extends ParseObject{
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
+    public String getPhoneNumber(String phoneNumber){
+        return getString("phoneNumber");
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        put("phoneNumber", phoneNumber);
+    }
+
     @Override
     public String toString(){
-        return getString("name") + "\n" + getString("address");
+        return getString("name") + "\n" + getString("address") + "\n" + getPhoneNumber("phoneNumber");
     }
 
 

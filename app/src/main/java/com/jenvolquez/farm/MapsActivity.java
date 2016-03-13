@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,6 +24,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jenvolquez.farm.fragments.PharmacyListFragment;
+import com.jenvolquez.farm.fragments.MedicineListFragment;
+import com.jenvolquez.farm.fragments.SufferingFragment;
 import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -122,7 +124,7 @@ public class MapsActivity extends AppCompatActivity
             myFragment= new PharmacyListFragment();
 
         } else if (id == R.id.nav_pills) {
-            myFragment= new PillsFragment();
+            myFragment= new MedicineListFragment();
 
 
         } else if (id == R.id.nav_padecimientos) {

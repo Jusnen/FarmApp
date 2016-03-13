@@ -1,4 +1,4 @@
-package com.jenvolquez.farm;
+package com.jenvolquez.farm.fragments;
 
 import android.os.Bundle;
 

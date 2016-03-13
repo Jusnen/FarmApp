@@ -15,7 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import com.parse.ParseObject;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -79,6 +79,9 @@ public class MapsActivity extends AppCompatActivity
                     .build();
         }
 
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Medicine");
         query.getInBackground("uTV8TMQFff", new GetCallback<ParseObject>() {

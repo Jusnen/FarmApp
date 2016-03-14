@@ -72,9 +72,7 @@ public class MapsActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, mapFragment)
                 .commit();
-
-        mapFragment.getMapAsync(this);
-
+        loadMapAsync(mapFragment);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -82,6 +80,10 @@ public class MapsActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
+    }
+
+    public void loadMapAsync(SupportMapFragment mapFragment) {
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -119,8 +121,9 @@ public class MapsActivity extends AppCompatActivity
         Fragment myFragment = null;
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_farm) {
+            myFragment = new SupportMapFragment();
+            loadMapAsync((SupportMapFragment) myFragment);
+        }  if (id == R.id.nav_farm) {
             myFragment= new PharmacyListFragment();
 
         } else if (id == R.id.nav_pills) {

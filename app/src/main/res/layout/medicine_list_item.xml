@@ -10,6 +10,7 @@
         android:layout_weight="1"
         android:id="@+id/med_thumb" />
 
+
     <LinearLayout android:layout_weight="3"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -26,5 +27,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+
     </LinearLayout>
+    <NumberPicker
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_margin="60dp"
+        android:id="@+id/numberPicker"
+        android:orientation="horizontal" />
+
+
+
+
 </LinearLayout>

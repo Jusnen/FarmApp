@@ -5,6 +5,7 @@ package com.jenvolquez.farm.parse;
  */
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
@@ -39,6 +40,10 @@ public class Pharmacy extends ParseObject{
 
     public void setPhoneNumber(String phoneNumber){
         put("phoneNumber", phoneNumber);
+    }
+
+    public ParseFile getPhoto() {
+        return getParseFile("farmPhoto");
     }
 
     @Override

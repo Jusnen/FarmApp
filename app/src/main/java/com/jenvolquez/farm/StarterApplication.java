@@ -2,6 +2,8 @@ package com.jenvolquez.farm;
 
 import android.app.Application;
 
+import com.google.android.gms.vision.barcode.Barcode;
+import com.jenvolquez.farm.parse.ContactInformation;
 import com.jenvolquez.farm.parse.Medicine;
 import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.Parse;
@@ -17,6 +19,7 @@ public class StarterApplication extends Application {
         // Add your initialization code here
         ParseObject.registerSubclass(Pharmacy.class);
         ParseObject.registerSubclass(Medicine.class);
+        ParseObject.registerSubclass(ContactInformation.class);
         Parse.initialize(this);
     }
 }

@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jenvolquez.farm.fragments.ContactFragment;
 import com.jenvolquez.farm.fragments.PharmacyListFragment;
 import com.jenvolquez.farm.fragments.MedicineListFragment;
 import com.jenvolquez.farm.fragments.SufferingFragment;
@@ -169,7 +170,6 @@ public class MapsActivity extends AppCompatActivity
         });
 
     }
-
     @Override
     public void onConnected(Bundle bundle) {
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -179,7 +179,6 @@ public class MapsActivity extends AppCompatActivity
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         }
     }
-
     @Override
     public void onConnectionSuspended(int i) {
 

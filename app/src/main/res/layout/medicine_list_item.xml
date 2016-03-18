@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView android:layout_height="100dp"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_margin="16dp"
         android:scaleType="centerInside"
         android:layout_weight="1"
         android:id="@+id/med_thumb" />
 
 
-    <LinearLayout android:layout_weight="3"
+    <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_alignTop="@id/med_thumb"
+        android:layout_toEndOf="@id/med_thumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
 
         <TextView android:id="@+id/med_name"
             android:textStyle="bold"
+            android:text="NOMBRE DEL MEDICAMENTO"
             android:layout_margin="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView android:id="@+id/med_description"
             android:layout_margin="5dp"
+            android:text="DESCRIPCION DEL MEDICAMENTO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <ImageButton
+            android:src="@drawable/ic_add_shopping_cart_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"/>
+
 
     </LinearLayout>
-    <NumberPicker
-        android:layout_width="55dp"
-        android:layout_height="30dp"
-        android:layout_margin="60dp"
-        android:id="@+id/numberPicker"
-        android:orientation="horizontal" />
-
-
-
-
-</LinearLayout>
+</RelativeLayout>

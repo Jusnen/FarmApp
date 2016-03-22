@@ -65,10 +65,19 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="FarmApp"></activity>
+            android:label="FarmApp" />
+
+        <activity android:name=".MapsDispatchActivity" />
+
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:name="com.parse.ui.ParseLoginActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
+            <meta-data
+
+                android:name="com.parse.ui.ParseLoginActivity.PARSE_LOGIN_ENABLED"
+                android:value="true"/>
+        </activity>
     </application>
 
 </manifest>

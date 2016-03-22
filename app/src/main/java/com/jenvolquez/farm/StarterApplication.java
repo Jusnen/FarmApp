@@ -9,9 +9,6 @@ import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
-/**
- * Created by Jen Volquez on 3/9/2016.
- */
 public class StarterApplication extends Application {
 
     public void onCreate() {

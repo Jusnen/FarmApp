@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <ImageView android:layout_height="100dp"
         android:layout_width="100dp"
@@ -18,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:weightSum="1"
-        android:layout_alignBottom="@+id/med_thumb">
+        android:id="@+id/linearLayout">
 
         <TextView android:id="@+id/med_name"
             android:textStyle="bold"
@@ -33,15 +34,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageButton
-            android:src="@drawable/ic_add_shopping_cart_black_24dp"
-            android:orientation="vertical"
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/numberEditContainer"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayout"
+        android:layout_alignStart="@id/linearLayout">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"/>
+            android:text="# items"
+            android:textStyle="bold"/>
 
-
-
+        <EditText
+            android:inputType="number"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/numberPicker" />
 
     </LinearLayout>
+
+    <ImageButton
+        android:src="@drawable/ic_remove_shopping_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:id="@+id/imageButton"
+        android:layout_toEndOf="@id/numberEditContainer"
+        android:layout_marginStart="20dp"
+        android:layout_alignBottom="@id/numberEditContainer" />
+
+
+
 </RelativeLayout>

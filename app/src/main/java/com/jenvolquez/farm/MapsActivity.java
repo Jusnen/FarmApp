@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jenvolquez.farm.fragments.CartFragment;
 import com.jenvolquez.farm.fragments.ContactFragment;
 import com.jenvolquez.farm.fragments.PharmacyListFragment;
 import com.jenvolquez.farm.fragments.MedicineListFragment;
@@ -107,13 +108,22 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Fragment fragment = null;
 
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.med_cart){
+            fragment= new CartFragment();
+
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+
+        return true;
+     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -139,6 +149,9 @@ public class MapsActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_about) {
             myFragment= new AboutFragment();
+
+        }else if (id == R.id.med_cart){
+            myFragment= new CartFragment();
 
         }
 

@@ -6,6 +6,7 @@ import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 
 import android.support.v4.app.ListFragment;
@@ -34,6 +35,7 @@ public class PharmacyListFragment extends ListFragment {
                 setListAdapter(adapter);
             }
         });
+
 
     }
 

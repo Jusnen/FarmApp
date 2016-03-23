@@ -2,12 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Farmacias"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+
+
+    <ImageView android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_margin="16dp"
+        android:scaleType="centerInside"
+        android:layout_weight="1"
+        android:id="@+id/med_thumb" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/med_thumb"
+        android:layout_alignTop="@+id/med_thumb">
+
+        <TextView android:id="@+id/farm_name"
+            android:textStyle="bold"
+            android:text="NOMBRE DE Farmacia"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/farm_address"
+            android:layout_margin="5dp"
+            android:text="DESCRIPCION"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
 </RelativeLayout>

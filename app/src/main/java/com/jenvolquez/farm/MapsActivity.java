@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jenvolquez.farm.fragments.AboutFragment;
 import com.jenvolquez.farm.fragments.CartFragment;
 import com.jenvolquez.farm.fragments.ContactFragment;
 import com.jenvolquez.farm.fragments.PharmacyListFragment;

@@ -9,18 +9,14 @@ import android.view.ViewGroup;
 
 import com.jenvolquez.farm.R;
 
-/**
- * Created by Jen Volquez on 3/9/2016.
- */
+
 public class AboutFragment extends Fragment{
 
     View myView;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.about_layout, container, false);
-
+        myView= inflater.inflate(R.layout.about_layout, container, false);
         return myView;
     }
 }

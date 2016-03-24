@@ -1,8 +1,10 @@
 package com.jenvolquez.farm.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,16 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.wallet.Cart;
 import com.jenvolquez.farm.R;
+import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Medicine;
 import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +56,6 @@ public class MedicineListFragment extends ListFragment {
         });
 
     }
-
 }
 
 class MedicineAdapter extends BaseAdapter {
@@ -78,12 +88,12 @@ class MedicineAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Medicine medicine = medicines.get(position);
-
         TextView nameTextView = null;
         TextView descriptionTextView = null;
         ImageView imageView = null;
+        ImageButton button = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -113,6 +123,25 @@ class MedicineAdapter extends BaseAdapter {
         } else {
             imageView.setImageBitmap(currentImage);
         }
+
+        final Context context = this.context;
+        button = (ImageButton)convertView.findViewById(R.id.buttons);
+          button.setOnClickListener(new View.OnClickListener(){
+              @Override
+              public void onClick(View v) {
+                Medicine medicine =  medicines.get(position);
+                  CartEntry cartEntry = new CartEntry();
+                  cartEntry.put("medicine", medicine);
+                  cartEntry.put("quantity", 1);
+                  cartEntry.put("owner", ParseUser.getCurrentUser());
+                  cartEntry.saveInBackground(new SaveCallback() {
+                      @Override
+                      public void done(ParseException e) {
+                          Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+                      }
+                  });
+              }
+          });
 
         return convertView;
     }

@@ -55,4 +55,5 @@ public class Pharmacy extends ParseObject{
     public void add(Pharmacy newFarm) {
 
     }
+
 }

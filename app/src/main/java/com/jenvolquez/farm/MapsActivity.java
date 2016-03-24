@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jenvolquez.farm.fragments.AboutFragment;
 import com.jenvolquez.farm.fragments.CartFragment;
@@ -40,6 +42,7 @@ import java.util.List;
 public class MapsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                    OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleMap.OnInfoWindowClickListener,
         GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
@@ -178,10 +181,13 @@ public class MapsActivity extends AppCompatActivity
                 for (Pharmacy p : pharmacies) {
                     googleMap.addMarker(new MarkerOptions()
                             .position(p.getLocation())
-                            .title(p.getName()));
+                            .title(p.getName())
+                            .snippet(p.getAddress()));
                 }
             }
         });
+
+        mMap.setOnInfoWindowClickListener(this);
 
     }
     @Override
@@ -211,5 +217,13 @@ public class MapsActivity extends AppCompatActivity
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, marker.getTitle(),Toast.LENGTH_LONG).show();
+        //setContentView(R.layout.farm_information_layout);
+
+
     }
 }

@@ -137,7 +137,7 @@ class MedicineAdapter extends BaseAdapter {
                   cartEntry.saveInBackground(new SaveCallback() {
                       @Override
                       public void done(ParseException e) {
-                          Toast.makeText(context, "Guardado", Toast.LENGTH_LONG).show();
+                          Toast.makeText(context, "Se ha agregado este producto ", Toast.LENGTH_LONG).show();
                       }
                   });
               }

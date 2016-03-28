@@ -1,5 +1,7 @@
 package com.jenvolquez.farm;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,12 +25,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jenvolquez.farm.fragments.AboutFragment;
 import com.jenvolquez.farm.fragments.CartFragment;
 import com.jenvolquez.farm.fragments.ContactFragment;
+import com.jenvolquez.farm.fragments.PharmacyInformationFragment;
 import com.jenvolquez.farm.fragments.PharmacyListFragment;
 import com.jenvolquez.farm.fragments.MedicineListFragment;
 import com.jenvolquez.farm.fragments.SufferingFragment;
@@ -187,6 +192,13 @@ public class MapsActivity extends AppCompatActivity
             }
         });
 
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        }
+
         mMap.setOnInfoWindowClickListener(this);
 
     }
@@ -195,7 +207,10 @@ public class MapsActivity extends AppCompatActivity
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
+            mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .title("Poscicion actual"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         }
     }
@@ -221,9 +236,10 @@ public class MapsActivity extends AppCompatActivity
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, marker.getTitle(),Toast.LENGTH_LONG).show();
-        //setContentView(R.layout.farm_information_layout);
-
-
+        PharmacyInformationFragment fragment = new PharmacyInformationFragment();
+        getSupportFragmentManager().beginTransaction()
+                .addToBackStack("PharmacyInformationFragment")
+                .replace(R.id.container, fragment)
+                .commit();
     }
 }

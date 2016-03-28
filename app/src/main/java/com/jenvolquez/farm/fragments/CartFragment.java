@@ -9,14 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.wallet.Cart;
 import com.jenvolquez.farm.R;
 import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Medicine;
+import com.parse.DeleteCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -25,6 +29,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
 
@@ -59,7 +64,7 @@ public class CartFragment extends Fragment{
         ParseQueryAdapter<CartEntry> parseQueryAdapter =
                 new ParseQueryAdapter<CartEntry>(getContext(), factory) {
                     @Override
-                    public View getItemView(CartEntry object, View v, ViewGroup parent) {
+                    public View getItemView(final CartEntry object, View v, ViewGroup parent) {
                         if (v == null) {
                             v = View.inflate(getContext(), R.layout.cart_list_item_layout, null);
                         }
@@ -74,10 +79,31 @@ public class CartFragment extends Fragment{
                             @Override
                             public void done(byte[] data, ParseException e) {
 
-                                medImageView.setImageBitmap(BitmapFactory.decodeByteArray(data,0, data.length));
+                                medImageView.setImageBitmap(BitmapFactory.decodeByteArray(data, 0, data.length));
                             }
                         });
 
+
+                        ImageButton button;
+                        button = (ImageButton)v.findViewById(R.id.removeItem);
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                               object.deleteInBackground(new DeleteCallback() {
+                                   @Override
+                                   public void done(ParseException e) {
+                                        Toast
+                                            .makeText(getContext(), "Se ha elimiando del carrito", Toast.LENGTH_LONG)
+                                            .show();
+                                       loadObjects();
+                                   }
+                               });
+                            }
+                        });
+
+                        EditText quantityEdit = (EditText)v.findViewById(R.id.quantityEdit);
+                        quantityEdit.setText(String.valueOf(object.getQuantity()));
 
                         return v;
                     }

@@ -25,6 +25,7 @@ import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Medicine;
 import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import bolts.Continuation;
 import bolts.Task;
@@ -46,7 +48,7 @@ public class MedicineListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ParseQuery<Medicine> query = ParseQuery.getQuery(Medicine.class);
-        final  MedicineListFragment self= this;
+        final MedicineListFragment self = this;
         query.findInBackground(new FindCallback<Medicine>() {
             @Override
             public void done(List<Medicine> medicines, ParseException e) {
@@ -61,12 +63,13 @@ public class MedicineListFragment extends ListFragment {
 class MedicineAdapter extends BaseAdapter {
 
     List<Medicine> medicines;
-    List<Bitmap>  images;
+    List<Bitmap> images;
     Context context;
-    public MedicineAdapter (Context context, List<Medicine> medicines) {
+
+    public MedicineAdapter(Context context, List<Medicine> medicines) {
         this.medicines = medicines;
         images = new ArrayList<>(medicines.size());
-        for(int i =0; i < medicines.size(); i ++) {
+        for (int i = 0; i < medicines.size(); i++) {
             images.add(null);
         }
         this.context = context;
@@ -108,7 +111,7 @@ class MedicineAdapter extends BaseAdapter {
         descriptionTextView.setText(medicine.getDescription());
         Bitmap currentImage = images.get(position);
         if (currentImage == null) {
-           final ImageView finalImgView = imageView;
+            final ImageView finalImgView = imageView;
             final int finalPos = position;
             medicine.getPhoto()
                     .getDataInBackground(new GetDataCallback() {
@@ -125,23 +128,68 @@ class MedicineAdapter extends BaseAdapter {
         }
 
         final Context context = this.context;
-        button = (ImageButton)convertView.findViewById(R.id.buttons);
-          button.setOnClickListener(new View.OnClickListener(){
-              @Override
-              public void onClick(View v) {
-                Medicine medicine =  medicines.get(position);
-                  CartEntry cartEntry = new CartEntry();
-                  cartEntry.put("medicine", medicine);
-                  cartEntry.put("quantity", 1);
-                  cartEntry.put("owner", ParseUser.getCurrentUser());
-                  cartEntry.saveInBackground(new SaveCallback() {
+        button = (ImageButton) convertView.findViewById(R.id.buttons);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Medicine medicine = medicines.get(position);
+
+                ParseQuery<CartEntry> query = new ParseQuery<>(CartEntry.class);
+                query.whereEqualTo("medicine", medicine);
+//                        .getFirstInBackground()
+//                        .continueWithTask(new Continuation<CartEntry, Task<Void>>() {
+//                            @Override
+//                            public Task<Void> then(Task<CartEntry> task) throws Exception {
+//                                CartEntry cartEntry = task.getResult();
+//                                if (cartEntry == null) {
+//                                    cartEntry = new CartEntry();
+//                                    cartEntry.put("medicine", medicine);
+//                                    cartEntry.put("quantity", 1);
+//                                    cartEntry.put("owner", ParseUser.getCurrentUser());
+//                                } else {
+//                                    cartEntry.incrementQuantity();
+//                                }
+//
+//                                return cartEntry.saveInBackground();
+//                            }
+//                        })
+//                        .continueWithTask(new Continuation<Void, Task<Void>>() {
+//                            @Override
+//                            public Task<Void> then(Task<Void> task) throws Exception {
+//                                Toast.makeText(context, "Se ha agregado este producto ", Toast.LENGTH_LONG).show();
+//                                return null;
+//                            }
+//                        });
+
+
+                  query.getFirstInBackground(new GetCallback<CartEntry>() {
                       @Override
-                      public void done(ParseException e) {
-                          Toast.makeText(context, "Se ha agregado este producto ", Toast.LENGTH_LONG).show();
+                      public void done(CartEntry object, ParseException e) {
+                          if (object != null) {
+                              object.incrementQuantity();
+                              object.saveInBackground(new SaveCallback() {
+                                  @Override
+                                  public void done(ParseException e) {
+                                      Toast.makeText(context, "Se ha agregado este producto ", Toast.LENGTH_LONG).show();
+                                  }
+                              });
+                          } else {
+                              CartEntry cartEntry = new CartEntry();
+                              cartEntry.put("medicine", medicine);
+                              cartEntry.put("quantity", 1);
+                              cartEntry.put("owner", ParseUser.getCurrentUser());
+                              cartEntry.saveInBackground(new SaveCallback() {
+                                  @Override
+                                  public void done(ParseException e) {
+                                      Toast.makeText(context, "Se ha agregado este producto ", Toast.LENGTH_LONG).show();
+                                  }
+                              });
+                          }
                       }
                   });
-              }
-          });
+
+            }
+        });
 
         return convertView;
     }

@@ -14,4 +14,15 @@ public class CartEntry extends ParseObject {
         return (Medicine)get("medicine");
     }
 
+    public int getQuantity() {
+        return getInt("quantity");
+    }
+
+    public void incrementQuantity() {
+        incrementQuantity(1);
+    }
+
+    public void incrementQuantity(int i) {
+        put("quantity", getInt("quantity") + i);
+    }
 }

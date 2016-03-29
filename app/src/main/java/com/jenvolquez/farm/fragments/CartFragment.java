@@ -1,5 +1,7 @@
 package com.jenvolquez.farm.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -90,15 +92,15 @@ public class CartFragment extends Fragment{
                             @Override
                             public void onClick(View v) {
 
-                               object.deleteInBackground(new DeleteCallback() {
-                                   @Override
-                                   public void done(ParseException e) {
+                                object.deleteInBackground(new DeleteCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
                                         Toast
-                                            .makeText(getContext(), "Se ha elimiando del carrito", Toast.LENGTH_LONG)
-                                            .show();
-                                       loadObjects();
-                                   }
-                               });
+                                                .makeText(getContext(), "Se ha elimiando del carrito", Toast.LENGTH_LONG)
+                                                .show();
+                                        loadObjects();
+                                    }
+                                });
                             }
                         });
 
@@ -108,6 +110,26 @@ public class CartFragment extends Fragment{
                         return v;
                     }
                 };
+
+        Button button;
+        button = (Button) myView.findViewById(R.id.buy_button);
+        button.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View V){
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Rojo");
+                builder.create().show();
+
+//                CheckoutFragment fragment = new CheckoutFragment();
+//                getFragmentManager().beginTransaction()
+//                        .addToBackStack("CheckoutFragment")
+//                        .replace(R.id.container, fragment)
+//                        .commit();
+            }
+        });
+
+
 
 
         parseQueryAdapter.setImageKey("medicine");

@@ -236,7 +236,7 @@ public class MapsActivity extends AppCompatActivity
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        PharmacyInformationFragment fragment = new PharmacyInformationFragment();
+        MedicineListFragment fragment = new MedicineListFragment();
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack("PharmacyInformationFragment")
                 .replace(R.id.container, fragment)

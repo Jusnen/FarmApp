@@ -11,7 +11,7 @@ import com.parse.ParseObject;
 public class CartEntry extends ParseObject {
 
     public Medicine getMedicine() {
-        return (Medicine)get("medicine");
+        return (Medicine)getParseObject("pharmacyMedicine").get("medicine");
     }
 
     public int getQuantity() {

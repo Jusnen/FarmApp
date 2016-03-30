@@ -27,4 +27,8 @@ public class Medicine extends ParseObject{
     public String getDescription() {
         return getString("description");
     }
+
+    public double getPrice() {
+        return getDouble("price");
+    }
 }

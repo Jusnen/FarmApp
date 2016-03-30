@@ -106,7 +106,8 @@ class MedicineAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final ParseObject medicine = medicines.get(position).getParseObject("medicine");
+        final ParseObject pharmacyMedicine = medicines.get(position);
+        final ParseObject medicine = pharmacyMedicine.getParseObject("medicine");
         TextView nameTextView = null;
         TextView descriptionTextView = null;
         ImageView imageView = null;
@@ -148,7 +149,7 @@ class MedicineAdapter extends BaseAdapter {
             public void onClick(View v) {
 
                 ParseQuery<CartEntry> query = new ParseQuery<>(CartEntry.class);
-                query.whereEqualTo("medicine", medicine);
+                query.whereEqualTo("pharmacyMedicine", pharmacyMedicine);
                   query.getFirstInBackground(new GetCallback<CartEntry>() {
                       @Override
                       public void done(CartEntry object, ParseException e) {
@@ -162,7 +163,7 @@ class MedicineAdapter extends BaseAdapter {
                               });
                           } else {
                               CartEntry cartEntry = new CartEntry();
-                              cartEntry.put("medicine", medicine);
+                              cartEntry.put("pharmacyMedicine", pharmacyMedicine);
                               cartEntry.put("quantity", 1);
                               cartEntry.put("owner", ParseUser.getCurrentUser());
                               cartEntry.saveInBackground(new SaveCallback() {
@@ -174,10 +175,8 @@ class MedicineAdapter extends BaseAdapter {
                           }
                       }
                   });
-
             }
         });
-
         return convertView;
     }
 }

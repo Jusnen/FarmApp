@@ -57,7 +57,8 @@ public class CartFragment extends Fragment{
                 ParseQuery<CartEntry> innerQuery = new ParseQuery<>(CartEntry.class);
                 ParseUser parseUser = ParseUser.getCurrentUser();
                 innerQuery.whereEqualTo("owner", parseUser);
-                innerQuery.include("medicine");
+                innerQuery.include("pharmacyMedicine");
+                innerQuery.include("pharmacyMedicine.medicine");
 
                 return innerQuery;
             }
@@ -70,7 +71,6 @@ public class CartFragment extends Fragment{
                         if (v == null) {
                             v = View.inflate(getContext(), R.layout.cart_list_item_layout, null);
                         }
-
 
                         TextView medNameTextView = (TextView)v.findViewById(R.id.med_name);
                         TextView medDescriptionTextView = (TextView)v.findViewById(R.id.med_description);
@@ -116,16 +116,16 @@ public class CartFragment extends Fragment{
         button.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View V){
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setTitle("Rojo");
+//                builder.create().show();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Rojo");
-                builder.create().show();
-
-//                CheckoutFragment fragment = new CheckoutFragment();
-//                getFragmentManager().beginTransaction()
-//                        .addToBackStack("CheckoutFragment")
-//                        .replace(R.id.container, fragment)
-//                        .commit();
+                CheckoutFragment fragment = new CheckoutFragment();
+                getFragmentManager().beginTransaction()
+                        .addToBackStack("CheckoutFragment")
+                        .replace(R.id.container, fragment)
+                        .commit();
             }
         });
 

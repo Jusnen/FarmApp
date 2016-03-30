@@ -27,7 +27,9 @@ import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -47,11 +49,23 @@ public class MedicineListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ParseQuery<Medicine> query = ParseQuery.getQuery(Medicine.class);
+
+        String pharmacyId = this.getArguments().getString("pharmacyId");
+        ParseQuery<ParseObject> outerQuery = ParseQuery.getQuery("Pharmacy")
+                  .whereEqualTo("objectId", pharmacyId);
+
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("PharmacyMedicine");
+        query.include("medicine");
+        query.whereMatchesQuery("pharmacy", outerQuery);
+
+
         final MedicineListFragment self = this;
-        query.findInBackground(new FindCallback<Medicine>() {
+
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(List<Medicine> medicines, ParseException e) {
+            public void done(List<ParseObject> medicines, ParseException e) {
+
                 MedicineAdapter medicineAdapter = new MedicineAdapter(self.getContext(), medicines);
                 setListAdapter(medicineAdapter);
             }
@@ -62,11 +76,11 @@ public class MedicineListFragment extends ListFragment {
 
 class MedicineAdapter extends BaseAdapter {
 
-    List<Medicine> medicines;
+    List<ParseObject> medicines;
     List<Bitmap> images;
     Context context;
 
-    public MedicineAdapter(Context context, List<Medicine> medicines) {
+    public MedicineAdapter(Context context, List<ParseObject> medicines) {
         this.medicines = medicines;
         images = new ArrayList<>(medicines.size());
         for (int i = 0; i < medicines.size(); i++) {
@@ -92,7 +106,7 @@ class MedicineAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Medicine medicine = medicines.get(position);
+        final ParseObject medicine = medicines.get(position).getParseObject("medicine");
         TextView nameTextView = null;
         TextView descriptionTextView = null;
         ImageView imageView = null;
@@ -107,13 +121,13 @@ class MedicineAdapter extends BaseAdapter {
         descriptionTextView = (TextView) convertView.findViewById(R.id.med_description);
         imageView = (ImageView) convertView.findViewById(R.id.med_thumb);
 
-        nameTextView.setText(medicine.getName());
-        descriptionTextView.setText(medicine.getDescription());
+        nameTextView.setText(medicine.getString("name"));
+        descriptionTextView.setText(medicine.getString("description"));
         Bitmap currentImage = images.get(position);
         if (currentImage == null) {
             final ImageView finalImgView = imageView;
             final int finalPos = position;
-            medicine.getPhoto()
+            medicine.getParseFile("medphoto")
                     .getDataInBackground(new GetDataCallback() {
                         @Override
                         public void done(byte[] data, ParseException e) {
@@ -132,36 +146,9 @@ class MedicineAdapter extends BaseAdapter {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Medicine medicine = medicines.get(position);
 
                 ParseQuery<CartEntry> query = new ParseQuery<>(CartEntry.class);
                 query.whereEqualTo("medicine", medicine);
-//                        .getFirstInBackground()
-//                        .continueWithTask(new Continuation<CartEntry, Task<Void>>() {
-//                            @Override
-//                            public Task<Void> then(Task<CartEntry> task) throws Exception {
-//                                CartEntry cartEntry = task.getResult();
-//                                if (cartEntry == null) {
-//                                    cartEntry = new CartEntry();
-//                                    cartEntry.put("medicine", medicine);
-//                                    cartEntry.put("quantity", 1);
-//                                    cartEntry.put("owner", ParseUser.getCurrentUser());
-//                                } else {
-//                                    cartEntry.incrementQuantity();
-//                                }
-//
-//                                return cartEntry.saveInBackground();
-//                            }
-//                        })
-//                        .continueWithTask(new Continuation<Void, Task<Void>>() {
-//                            @Override
-//                            public Task<Void> then(Task<Void> task) throws Exception {
-//                                Toast.makeText(context, "Se ha agregado este producto ", Toast.LENGTH_LONG).show();
-//                                return null;
-//                            }
-//                        });
-
-
                   query.getFirstInBackground(new GetCallback<CartEntry>() {
                       @Override
                       public void done(CartEntry object, ParseException e) {

@@ -1,7 +1,5 @@
 package com.jenvolquez.farm;
 
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -33,7 +29,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.jenvolquez.farm.fragments.AboutFragment;
 import com.jenvolquez.farm.fragments.CartFragment;
 import com.jenvolquez.farm.fragments.ContactFragment;
-import com.jenvolquez.farm.fragments.PharmacyInformationFragment;
 import com.jenvolquez.farm.fragments.PharmacyListFragment;
 import com.jenvolquez.farm.fragments.MedicineListFragment;
 import com.jenvolquez.farm.fragments.SufferingFragment;
@@ -42,7 +37,10 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -52,6 +50,7 @@ public class MapsActivity extends AppCompatActivity
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
+    private Map<Marker, Pharmacy> markerPharmacyDictionary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +90,8 @@ public class MapsActivity extends AppCompatActivity
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        markerPharmacyDictionary = new HashMap<Marker, Pharmacy>();
     }
 
     public void loadMapAsync(SupportMapFragment mapFragment) {
@@ -184,10 +185,11 @@ public class MapsActivity extends AppCompatActivity
             @Override
             public void done(List<Pharmacy> pharmacies, ParseException e) {
                 for (Pharmacy p : pharmacies) {
-                    googleMap.addMarker(new MarkerOptions()
+                    Marker m = googleMap.addMarker(new MarkerOptions()
                             .position(p.getLocation())
                             .title(p.getName())
                             .snippet(p.getAddress()));
+                    markerPharmacyDictionary.put(m, p);
                 }
             }
         });
@@ -237,8 +239,14 @@ public class MapsActivity extends AppCompatActivity
     @Override
     public void onInfoWindowClick(Marker marker) {
         MedicineListFragment fragment = new MedicineListFragment();
+        Pharmacy pharmacy = markerPharmacyDictionary.get(marker);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("pharmacyId", pharmacy.getObjectId());
+        fragment.setArguments(bundle);
+
         getSupportFragmentManager().beginTransaction()
-                .addToBackStack("PharmacyInformationFragment")
+                .addToBackStack("MedicineListFragment")
                 .replace(R.id.container, fragment)
                 .commit();
     }

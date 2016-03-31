@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.jenvolquez.farm.R;
 import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Medicine;
 import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -34,6 +36,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 import bolts.Continuation;
 import bolts.Task;
@@ -54,11 +58,7 @@ public class CartFragment extends Fragment{
         ParseQueryAdapter.QueryFactory<CartEntry> factory = new ParseQueryAdapter.QueryFactory<CartEntry>() {
             @Override
             public ParseQuery<CartEntry> create() {
-                ParseQuery<CartEntry> innerQuery = new ParseQuery<>(CartEntry.class);
-                ParseUser parseUser = ParseUser.getCurrentUser();
-                innerQuery.whereEqualTo("owner", parseUser);
-                innerQuery.include("pharmacyMedicine");
-                innerQuery.include("pharmacyMedicine.medicine");
+                ParseQuery<CartEntry> innerQuery = getCartEntryQuery();
 
                 return innerQuery;
             }
@@ -116,11 +116,6 @@ public class CartFragment extends Fragment{
         button.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View V){
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("Rojo");
-//                builder.create().show();
-
                 CheckoutFragment fragment = new CheckoutFragment();
                 getFragmentManager().beginTransaction()
                         .addToBackStack("CheckoutFragment")
@@ -137,6 +132,16 @@ public class CartFragment extends Fragment{
         listView.setAdapter(parseQueryAdapter);
 
         return myView;
+    }
+
+    @NonNull
+    private ParseQuery<CartEntry> getCartEntryQuery() {
+        ParseQuery<CartEntry> innerQuery = new ParseQuery<>(CartEntry.class);
+        ParseUser parseUser = ParseUser.getCurrentUser();
+        innerQuery.whereEqualTo("owner", parseUser);
+        innerQuery.include("pharmacyMedicine");
+        innerQuery.include("pharmacyMedicine.medicine");
+        return innerQuery;
     }
 
 }

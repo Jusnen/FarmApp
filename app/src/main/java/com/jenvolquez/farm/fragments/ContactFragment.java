@@ -40,8 +40,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
 
         messageedit = (EditText) myView.findViewById(R.id.message_edit);
         messageedit.setOnClickListener(this);
-
-
         button = (Button) myView.findViewById(R.id.send_button);
         button.setOnClickListener(this);
 

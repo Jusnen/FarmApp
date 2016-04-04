@@ -124,9 +124,6 @@ public class CartFragment extends Fragment{
             }
         });
 
-
-
-
         parseQueryAdapter.setImageKey("medicine");
 
         listView.setAdapter(parseQueryAdapter);

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -60,8 +61,6 @@ public class CheckoutFragment extends Fragment{
                         TextView medNameTextView = (TextView)v.findViewById(R.id.medicine_name);
                         TextView medPriceTextView = (TextView)v.findViewById(R.id.medicine_price);
                         TextView medQuantityTextView = (TextView)v.findViewById(R.id.medicine_quantity);
-
-
                         int quantity = object
                                 .getInt("quantity");
                         double total = object.getParseObject("pharmacyMedicine").getDouble("price") * quantity;
@@ -75,7 +74,6 @@ public class CheckoutFragment extends Fragment{
                 };
 
         ((ListView)myView.findViewById(R.id.cartListView)).setAdapter(parseQueryAdapter);
-
         getCartEntryQuery()
                 .findInBackground(new FindCallback<CartEntry>() {
                     @Override
@@ -88,13 +86,11 @@ public class CheckoutFragment extends Fragment{
                         ((TextView)myView.findViewById(R.id.medicine_total))
                                 .setText(String.valueOf(subtotal));
                     }
-
-
-
                 });
-
         return myView;
     }
+
+
 
     @NonNull
     private ParseQuery<CartEntry> getCartEntryQuery() {

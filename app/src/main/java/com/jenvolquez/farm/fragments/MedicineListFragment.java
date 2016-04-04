@@ -112,6 +112,7 @@ class MedicineAdapter extends BaseAdapter {
         TextView descriptionTextView = null;
         ImageView imageView = null;
         ImageButton button = null;
+        TextView priceTextView = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,9 +122,12 @@ class MedicineAdapter extends BaseAdapter {
         nameTextView = (TextView) convertView.findViewById(R.id.med_name);
         descriptionTextView = (TextView) convertView.findViewById(R.id.med_description);
         imageView = (ImageView) convertView.findViewById(R.id.med_thumb);
+        priceTextView = (TextView) convertView.findViewById(R.id.price_medicine);
 
         nameTextView.setText(medicine.getString("name"));
         descriptionTextView.setText(medicine.getString("description"));
+        final Double price = pharmacyMedicine.getDouble("price");
+        priceTextView.setText(String.valueOf(price));
         Bitmap currentImage = images.get(position);
         if (currentImage == null) {
             final ImageView finalImgView = imageView;

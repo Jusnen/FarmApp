@@ -62,8 +62,6 @@ class PharmacyAdapter extends BaseAdapter {
         }
         this.context= context;
     }
-
-
     @Override
     public int getCount() {
         return pharmacies.size();
@@ -98,7 +96,6 @@ class PharmacyAdapter extends BaseAdapter {
         addressTextView = (TextView) convertView.findViewById(R.id.farm_address);
         phoneTextView = (TextView) convertView.findViewById(R.id.phone_number);
         imageView = (ImageView) convertView.findViewById(R.id.med_thumb);
-
 
         nameTextView.setText(pharmacy.getName());
         addressTextView.setText(pharmacy.getAddress());

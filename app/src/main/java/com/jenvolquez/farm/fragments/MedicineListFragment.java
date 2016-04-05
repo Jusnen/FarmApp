@@ -57,7 +57,9 @@ public class MedicineListFragment extends ListFragment {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("PharmacyMedicine");
         query.include("medicine");
+        query.include("pharmacy");
         query.whereMatchesQuery("pharmacy", outerQuery);
+
 
 
         final MedicineListFragment self = this;
@@ -108,11 +110,13 @@ class MedicineAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ParseObject pharmacyMedicine = medicines.get(position);
         final ParseObject medicine = pharmacyMedicine.getParseObject("medicine");
+        final ParseObject pharmacyName = pharmacyMedicine.getParseObject("pharmacy");
         TextView nameTextView = null;
         TextView descriptionTextView = null;
         ImageView imageView = null;
         ImageButton button = null;
         TextView priceTextView = null;
+        TextView pharmacynameTextView = null;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -123,11 +127,17 @@ class MedicineAdapter extends BaseAdapter {
         descriptionTextView = (TextView) convertView.findViewById(R.id.med_description);
         imageView = (ImageView) convertView.findViewById(R.id.med_thumb);
         priceTextView = (TextView) convertView.findViewById(R.id.price_medicine);
+        pharmacynameTextView= (TextView) convertView.findViewById(R.id.pharmacy_name);
 
         nameTextView.setText(medicine.getString("name"));
         descriptionTextView.setText(medicine.getString("description"));
         final Double price = pharmacyMedicine.getDouble("price");
         priceTextView.setText(String.valueOf(price));
+
+
+        pharmacynameTextView.setText(pharmacyName.getString("name"));
+
+
         Bitmap currentImage = images.get(position);
         if (currentImage == null) {
             final ImageView finalImgView = imageView;

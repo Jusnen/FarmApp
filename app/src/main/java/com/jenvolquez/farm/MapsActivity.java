@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jenvolquez.farm.fragments.AboutFragment;
+import com.jenvolquez.farm.fragments.AllMedicineFragment;
 import com.jenvolquez.farm.fragments.CartFragment;
 import com.jenvolquez.farm.fragments.ContactFragment;
 import com.jenvolquez.farm.fragments.PharmacyListFragment;
@@ -148,7 +149,7 @@ public class MapsActivity extends AppCompatActivity
             myFragment= new PharmacyListFragment();
 
         } else if (id == R.id.nav_pills) {
-            myFragment= new MedicineListFragment();
+            myFragment= new AllMedicineFragment();
 
 
         } else if (id == R.id.nav_padecimientos) {

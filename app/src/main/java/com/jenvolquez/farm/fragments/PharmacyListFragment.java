@@ -26,10 +26,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by Jen Volquez on 3/10/2016.
- */
 public class PharmacyListFragment extends ListFragment {
 
     @Override

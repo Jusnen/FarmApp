@@ -1,7 +1,17 @@
 package com.jenvolquez.farm.parse;
 
-/**
- * Created by Jen Volquez on 4/7/2016.
- */
-public class Order {
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
+
+@ParseClassName("Order")
+public class Order extends ParseObject {
+
+    public String getAddressReference(){
+        return getString("addressReference");
+    }
+
+    public void setAddressReference(String AddressReference){
+        put("addressReference", AddressReference);
+    }
 }

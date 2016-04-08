@@ -9,12 +9,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +44,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,11 +53,90 @@ import bolts.Task;
 
 public class MedicineListFragment extends ListFragment {
 
+    String pharmacyId;
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_medicine_list, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        ImageView closeButton = (ImageView)searchView.findViewById(R.id.search_close_btn);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText et = (EditText) searchView.findViewById(R.id.search_src_text);
+
+                //Clear the text from EditText view
+                et.setText("");
+
+                //Clear query
+                searchView.setQuery("", false);
+                //Collapse the action view
+                searchView.onActionViewCollapsed();
+                //Collapse the search widget
+                searchItem.collapseActionView();
+
+                queryAllMedicines();
+            }
+        });
+
+        final MedicineListFragment self = this;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                ParseQuery<ParseObject> sufferingQuery = ParseQuery
+                        .getQuery("Suffering").whereContains("NameSuffering", query);
+
+//                ArrayList<String> keys = new ArrayList<String>();
+//                keys.add("medicine.objectId");
+
+                ParseQuery<ParseObject> medicinesSufferingQuery = ParseQuery
+                        .getQuery("SufferingMedicine")
+                        .whereMatchesQuery("suffering", sufferingQuery);
+//                        .selectKeys(keys);
+
+                ParseQuery<ParseObject> pharmacyQuery = ParseQuery.getQuery("Pharmacy")
+                        .whereEqualTo("objectId", pharmacyId);
+
+                ParseQuery.getQuery("PharmacyMedicine")
+                          .whereMatchesKeyInQuery("medicine", "medicine", medicinesSufferingQuery)
+                        .whereMatchesQuery("pharmacy", pharmacyQuery)
+                        .include("medicine")
+                          .include("pharmacy")
+                        .findInBackground(new FindCallback<ParseObject>() {
+                            @Override
+                            public void done(List<ParseObject> medicines, ParseException e) {
+                                MedicineAdapter medicineAdapter = new MedicineAdapter(self.getContext(), medicines);
+                                setListAdapter(medicineAdapter);
+                            }
+                        });
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String pharmacyId = this.getArguments().getString("pharmacyId");
+        pharmacyId = this.getArguments().getString("pharmacyId");
+        queryAllMedicines();
+
+        setHasOptionsMenu(true);
+    }
+
+    private void queryAllMedicines() {
         ParseQuery<ParseObject> outerQuery = ParseQuery.getQuery("Pharmacy")
                   .whereEqualTo("objectId", pharmacyId);
 
@@ -59,7 +145,6 @@ public class MedicineListFragment extends ListFragment {
         query.include("medicine");
         query.include("pharmacy");
         query.whereMatchesQuery("pharmacy", outerQuery);
-
 
 
         final MedicineListFragment self = this;
@@ -72,7 +157,6 @@ public class MedicineListFragment extends ListFragment {
                 setListAdapter(medicineAdapter);
             }
         }        );
-
     }
 }
 

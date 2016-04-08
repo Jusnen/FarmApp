@@ -65,7 +65,15 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="FarmApp" />
+            android:label="FarmApp">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>>
+
+
 
         <activity android:name=".MapsDispatchActivity" />
 

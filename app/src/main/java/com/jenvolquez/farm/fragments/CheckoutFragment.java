@@ -73,6 +73,8 @@ public class CheckoutFragment extends Fragment{
                     }
                 };
 
+//        ((TextView)myView.findViewById(R.id.pharmacy_name))
+
         ((ListView)myView.findViewById(R.id.cartListView)).setAdapter(parseQueryAdapter);
         getCartEntryQuery()
                 .findInBackground(new FindCallback<CartEntry>() {
@@ -90,8 +92,6 @@ public class CheckoutFragment extends Fragment{
         return myView;
     }
 
-
-
     @NonNull
     private ParseQuery<CartEntry> getCartEntryQuery() {
         ParseQuery<CartEntry> innerQuery = new ParseQuery<>(CartEntry.class);
@@ -99,6 +99,7 @@ public class CheckoutFragment extends Fragment{
         innerQuery.whereEqualTo("owner", parseUser);
         innerQuery.include("pharmacyMedicine");
         innerQuery.include("pharmacyMedicine.medicine");
+
         return innerQuery;
     }
 }

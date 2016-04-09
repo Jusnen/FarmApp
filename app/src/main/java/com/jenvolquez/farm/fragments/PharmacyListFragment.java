@@ -80,6 +80,7 @@ class PharmacyAdapter extends BaseAdapter {
         TextView nameTextView = null;
         TextView addressTextView = null;
         TextView phoneTextView = null;
+        TextView hourTextView = null;
         ImageView imageView = null;
 
         if (convertView == null){
@@ -91,10 +92,12 @@ class PharmacyAdapter extends BaseAdapter {
         nameTextView = (TextView) convertView.findViewById(R.id.farm_name);
         addressTextView = (TextView) convertView.findViewById(R.id.farm_address);
         phoneTextView = (TextView) convertView.findViewById(R.id.phone_number);
+        hourTextView = (TextView)convertView.findViewById(R.id.hour);
         imageView = (ImageView) convertView.findViewById(R.id.med_thumb);
 
         nameTextView.setText(pharmacy.getName());
         addressTextView.setText(pharmacy.getAddress());
+        hourTextView.setText(pharmacy.getHour());
         phoneTextView.setText(pharmacy.getPhoneNumber(toString()));
         Bitmap currentImage = images.get(position);
         if (currentImage == null) {

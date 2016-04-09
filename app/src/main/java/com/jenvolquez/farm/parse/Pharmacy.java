@@ -21,6 +21,19 @@ public class Pharmacy extends ParseObject{
         put("name", name);
     }
 
+    public String getHour(){
+        return getString("hour");
+    }
+
+    public void setHour(String Hour){
+        put("hour", Hour);
+    }
+
+
+
+
+
+
     public String getAddress(){
         return getString("address");
     }

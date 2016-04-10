@@ -3,9 +3,7 @@ package com.jenvolquez.farm.parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-/**
- * Created by Jen Volquez on 3/20/2016.
- */
+
 @ParseClassName("User")
 public class RegisterLog extends ParseObject {
 

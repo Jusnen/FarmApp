@@ -1,8 +1,6 @@
 package com.jenvolquez.farm.parse;
 
-/**
- * Created by Jen Volquez on 3/13/2016.
- */
+
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;

@@ -1,5 +1,6 @@
 package com.jenvolquez.farm;
 
+import android.app.Dialog;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,9 +60,10 @@ public class MapsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_maps);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+            setContentView(R.layout.activity_maps);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +98,23 @@ public class MapsActivity extends AppCompatActivity
 
         markerPharmacyDictionary = new HashMap<Marker, Pharmacy>();
     }
+
+//    public boolean serviceOK(){
+//        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+//
+//        if (isAvailable == ConnectionResult.SUCCESS){
+//            return true;
+//        }
+//        else if (GooglePlayServicesUtil.isUserRecoverableError(isAvailable)){
+//            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(isAvailable, this, 2))
+//                    dialog.show();
+//        }
+//        else{
+//            Toast.makeText(this, "No se puede conectar a los servicios de google", Toast.LENGTH_SHORT).show();
+//        }
+//        return false;
+//    }
+
 
     public void loadMapAsync(SupportMapFragment mapFragment) {
         mapFragment.getMapAsync(this);
@@ -178,6 +199,8 @@ public class MapsActivity extends AppCompatActivity
         mMap = googleMap;
         ParseQuery<Pharmacy> query = ParseQuery.getQuery(Pharmacy.class);
         final MapsActivity self = this;
+
+
         query.findInBackground(new FindCallback<Pharmacy>() {
 
             @Override
@@ -195,13 +218,14 @@ public class MapsActivity extends AppCompatActivity
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in Sydney"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Poscición actual"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         }
 
         mMap.setOnInfoWindowClickListener(this);
-
     }
+
+
     @Override
     public void onConnected(Bundle bundle) {
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -210,7 +234,7 @@ public class MapsActivity extends AppCompatActivity
             mMap.addMarker(new MarkerOptions()
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                    .title("Poscicion actual"));
+                    .title("Poscición actual"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         }
     }

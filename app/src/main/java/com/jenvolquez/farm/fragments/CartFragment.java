@@ -113,9 +113,15 @@ public class CartFragment extends Fragment{
 
         Button button;
         button = (Button) myView.findViewById(R.id.buy_button);
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View V){
+            public void onClick(View V) {
+
+
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setMessage("Hola")
+//                        .setTitle("saludos");
                 CheckoutFragment fragment = new CheckoutFragment();
                 getFragmentManager().beginTransaction()
                         .addToBackStack("CheckoutFragment")
@@ -123,6 +129,11 @@ public class CartFragment extends Fragment{
                         .commit();
             }
         });
+
+
+
+
+
 
         parseQueryAdapter.setImageKey("medicine");
 

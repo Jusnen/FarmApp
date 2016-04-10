@@ -3,9 +3,6 @@ package com.jenvolquez.farm.parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
-/**
- * Created by Jen Volquez on 3/16/2016.
- */
 
 @ParseClassName("ContactInformation")
 public class ContactInformation extends ParseObject{

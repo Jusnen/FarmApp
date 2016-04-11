@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.jenvolquez.farm.R;
 import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Order;
@@ -98,6 +99,7 @@ public class CheckoutFragment extends Fragment{
 
         Button checkoutButton = (Button)myView.findViewById(R.id.checkout_button);
 
+        final CheckoutFragment self = this;
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,16 +111,22 @@ public class CheckoutFragment extends Fragment{
                         order.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                ArrayList<ParseObject> orderItems = new ArrayList<ParseObject>();
+                                final ArrayList<ParseObject> orderItems = new ArrayList<ParseObject>();
                                 for (CartEntry entry : entries) {
                                     ParseObject orderItem = mapToOrderItem(entry, order);
                                     orderItems.add(orderItem);
                                 }
 
-                                ParseObject.saveAllInBackground(orderItems, new SaveCallback() {
+                                ParseObject.deleteAllInBackground(entries, new DeleteCallback() {
                                     @Override
                                     public void done(ParseException e) {
-                                        Toast.makeText(getContext(), "Creando orden", Toast.LENGTH_SHORT).show();
+                                        ParseObject.saveAllInBackground(orderItems, new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                closefragment();
+                                                Toast.makeText(getContext(), "Creando orden", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -134,6 +142,14 @@ public class CheckoutFragment extends Fragment{
         pharmacyNameTextView.setText(pharmacy.getName());
 
         return myView;
+    }
+
+    private void closefragment() {
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new SupportMapFragment())
+                .commit();
     }
 
     private Order createOrder() {

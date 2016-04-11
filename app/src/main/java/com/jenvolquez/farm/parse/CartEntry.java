@@ -12,6 +12,10 @@ public class CartEntry extends ParseObject {
         return (Medicine)getParseObject("pharmacyMedicine").get("medicine");
     }
 
+    public Pharmacy getPharmacy() {
+        return (Pharmacy)getParseObject("pharmacyMedicine").get("pharmacy");
+    }
+
     public Double getPrice() {
         return getParseObject("pharmacyMedicine").getDouble("price");
     }

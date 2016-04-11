@@ -1,5 +1,6 @@
 package com.jenvolquez.farm.fragments;
 
+import android.app.AlertDialog;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.jenvolquez.farm.R;
 import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Order;
 import com.jenvolquez.farm.parse.OrderItem;
+import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -38,6 +40,8 @@ import java.util.zip.Inflater;
 
 
 public class CheckoutFragment extends Fragment{
+
+    private Pharmacy pharmacy;
 
     @Nullable
     @Override
@@ -63,6 +67,7 @@ public class CheckoutFragment extends Fragment{
                         TextView medNameTextView = (TextView)v.findViewById(R.id.medicine_name);
                         TextView medPriceTextView = (TextView)v.findViewById(R.id.medicine_price);
                         TextView medQuantityTextView = (TextView)v.findViewById(R.id.medicine_quantity);
+
                         int quantity = object
                                 .getInt("quantity");
                         double total = object.getParseObject("pharmacyMedicine").getDouble("price") * quantity;
@@ -85,7 +90,7 @@ public class CheckoutFragment extends Fragment{
                             subtotal += ce.getQuantity() * ce.getParseObject("pharmacyMedicine")
                                     .getDouble("price");
                         }
-                        ((TextView)myView.findViewById(R.id.medicine_total))
+                        ((TextView) myView.findViewById(R.id.medicine_total))
                                 .setText(String.valueOf(subtotal));
                     }
                 });
@@ -101,29 +106,32 @@ public class CheckoutFragment extends Fragment{
                     @Override
                     public void done(final List<CartEntry> entries, ParseException e) {
                         final Order order = createOrder();
-                            order.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    ArrayList<ParseObject> orderItems = new ArrayList<ParseObject>();
-                                    for (CartEntry entry : entries) {
-                                        ParseObject orderItem = mapToOrderItem(entry, order);
-                                        orderItems.add(orderItem);
-                                    }
-
-                                    ParseObject.saveAllInBackground(orderItems, new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            Toast.makeText(getContext(), "Creando orden", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                        order.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                ArrayList<ParseObject> orderItems = new ArrayList<ParseObject>();
+                                for (CartEntry entry : entries) {
+                                    ParseObject orderItem = mapToOrderItem(entry, order);
+                                    orderItems.add(orderItem);
                                 }
-                            });
+
+                                ParseObject.saveAllInBackground(orderItems, new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Toast.makeText(getContext(), "Creando orden", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
 
             }
         });
 
+
+       TextView pharmacyNameTextView = (TextView)myView.findViewById(R.id.pharmacy_name);
+        pharmacyNameTextView.setText(pharmacy.getName());
 
         return myView;
     }
@@ -132,6 +140,7 @@ public class CheckoutFragment extends Fragment{
         Order order = new Order();
 
         View myView = getView();
+
         RadioButton orderEfectivoRadioButton = (RadioButton)myView.findViewById(R.id.pago_efectivo);
         RadioButton  orderTarjetaRadioButton = (RadioButton)myView.findViewById(R.id.pago_tarjeta);
         TextView  orderReferenceTextView = (TextView)myView.findViewById(R.id.address_reference);
@@ -175,11 +184,18 @@ public class CheckoutFragment extends Fragment{
 
     @NonNull
     private ParseQuery<CartEntry> getAllEntriesOnCartQuery() {
+
+        ParseQuery query = ParseQuery.getQuery("PharmacyMedicine")
+                  .whereEqualTo("pharmacy", pharmacy);
+
+
         ParseQuery<CartEntry> innerQuery = new ParseQuery<>(CartEntry.class);
         ParseUser parseUser = ParseUser.getCurrentUser();
         innerQuery.whereEqualTo("owner", parseUser);
-        innerQuery.include("pharmacyMedicine");
+        innerQuery.include("pharmacyMedicine.pharmacy");
         innerQuery.include("pharmacyMedicine.medicine");
+
+        innerQuery.whereMatchesQuery("pharmacyMedicine", query);
         return innerQuery;
     }
 
@@ -188,5 +204,9 @@ public class CheckoutFragment extends Fragment{
         ParseQuery<CartEntry> innerQuery = getAllEntriesOnCartQuery();
 
         return innerQuery;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
     }
 }

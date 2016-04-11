@@ -3,6 +3,7 @@ package com.jenvolquez.farm.fragments;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +25,7 @@ import com.google.android.gms.wallet.Cart;
 import com.jenvolquez.farm.R;
 import com.jenvolquez.farm.parse.CartEntry;
 import com.jenvolquez.farm.parse.Medicine;
+import com.jenvolquez.farm.parse.Pharmacy;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
@@ -37,7 +40,10 @@ import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import bolts.Continuation;
 import bolts.Task;
@@ -116,17 +122,7 @@ public class CartFragment extends Fragment{
         button.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View V) {
-
-
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setMessage("Hola")
-//                        .setTitle("saludos");
-                CheckoutFragment fragment = new CheckoutFragment();
-                getFragmentManager().beginTransaction()
-                        .addToBackStack("CheckoutFragment")
-                        .replace(R.id.container, fragment)
-                        .commit();
+                showPharmacySelectorDialog();
             }
         });
 
@@ -142,6 +138,41 @@ public class CartFragment extends Fragment{
         return myView;
     }
 
+
+    private void showPharmacySelectorDialog() {
+        getCartEntryQuery().findInBackground(new FindCallback<CartEntry>() {
+            @Override
+            public void done(List<CartEntry> entries, ParseException e) {
+                final HashMap<String, Pharmacy> pharmacyMap = new HashMap<String, Pharmacy>();
+                for (CartEntry entry : entries) {
+                    if (!pharmacyMap.containsKey(entry.getPharmacy().getName()))
+                        pharmacyMap.put(entry.getPharmacy().getName(), entry.getPharmacy());
+                }
+
+                Set<String> pharamcyNames = pharmacyMap.keySet();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Seleccione una Farmacia");
+                final String[] names = pharamcyNames.toArray(new String[pharamcyNames.size()]);
+                        builder.setItems(names, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                CheckoutFragment fragment = new CheckoutFragment();
+                                Pharmacy pharmacy = pharmacyMap.get(names[which]);
+                                fragment.setPharmacy(pharmacy);
+                                getFragmentManager().beginTransaction()
+                                        .addToBackStack("CheckoutFragment")
+                                        .replace(R.id.container, fragment)
+                                        .commit();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+
     @NonNull
     private ParseQuery<CartEntry> getCartEntryQuery() {
         ParseQuery<CartEntry> innerQuery = new ParseQuery<>(CartEntry.class);
@@ -149,6 +180,7 @@ public class CartFragment extends Fragment{
         innerQuery.whereEqualTo("owner", parseUser);
         innerQuery.include("pharmacyMedicine");
         innerQuery.include("pharmacyMedicine.medicine");
+        innerQuery.include("pharmacyMedicine.pharmacy");
         return innerQuery;
     }
 
